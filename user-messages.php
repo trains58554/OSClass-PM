@@ -48,7 +48,7 @@
                   <?php echo __('Sent to: ','osc_pm') . $user['s_name'] . ' ' . __('on: ','osc_pm') . osc_format_date($pm['message_date']) . ', ' . osc_format_time($pm['message_date']); ?>
                </div> 
                <ul class="reset pm_tool">
-                  <li class="reply"><a href="" ><?php _e('Reply','osc_pm'); ?></a></li>
+                  <li class="reply"><a href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php'; ?>" ><?php _e('Reply','osc_pm'); ?></a></li>
                   <li class="quote"><a href="" ><?php _e('Quote','osc_pm'); ?></a></li>
                   <li class="del"><a onclick="if (!confirm('<?php _e('Are you sure you want to delete this personal messages?','osc_pm'); ?>')) return false;" href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-proc.php&pms=' . $pm['pm_id'] . '&option=delMessages&box=inbox'; ?>" ><?php _e('Delete','osc_pm'); ?></a></li>
                </ul>              

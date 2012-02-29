@@ -132,6 +132,12 @@ require_once 'ModelPM.php';
     
 // End user side related.
 
+// This is the email section.
+
+   
+
+// End email section.
+
 // Everything below here is admin side related.
 
     function osc_pm_config() {

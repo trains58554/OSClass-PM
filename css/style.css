@@ -108,3 +108,9 @@ ul.pm_tool li a {
    line-height: 18px;
    padding: 0 0 0 18px;
 }
+
+/* user-send.php */
+#sendMessage {
+   text-align: right;
+   padding-right: 5px;
+}
