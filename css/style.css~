@@ -1,0 +1,110 @@
+table.display td.pmCheckboxes {
+   padding-left: 19px;
+}
+a.mesLink, a.mesLink:visited {
+   color: #004E9D;
+   text-decoration: none;
+}
+a.mesLink:hover {
+   color: #004E9D;
+   text-decoration: underline;
+}
+
+td.newPM {
+   font-weight: bold;   
+}
+
+/* user-messages.php */
+.pm_main {
+   background-color: #E7EAEF;
+   padding: 10px;
+   border-radius: 5px 5px 5px 5px;
+}
+.pm_author {
+   float: left;
+   width: 6em;
+}
+
+span.sender {
+   font-weight: bold;
+   font-size: 12px;
+}
+
+span.sender_name {
+   padding-left: 10px;
+   line-height: 16px;
+}
+
+.pm_message {
+   margin: 0 0 0 8em;
+}
+
+.pm_tools {
+   width: 100%;
+   overflow: hidden;
+   padding-bottom: 5px;
+   border-bottom: 3px groove black;
+}
+
+.pm_sub {
+   float: left;
+   width: 50%;
+}
+
+.pm_mess {
+   clear: right;
+   margin-top: 1em;
+   padding: 5px;
+   background-color: #F0F4F7; 
+   border-radius: 8px 8px 8px 8px;
+}
+
+.subject_pm {
+   font-weight: bold;
+}
+
+.pm_menu {
+   float: right;
+   width: 50%;
+}
+
+ul.pm_tool {
+   clear: right;
+   float: right;
+   font: bold 0.85em arial,sans-serif;
+   margin: 0.9em 11px 0 0;
+   text-align: right;
+}
+
+
+ul.reset, ul.reset li {
+   list-style: none outside none;
+   margin: 0;
+   padding: 0;
+}
+
+ul.pm_tool li {
+   display: inline;
+   float: left;
+   margin: 0 0 0 5px;
+}
+
+li.reply {
+   background: url('../images/reply.png') no-repeat transparent;
+}
+
+li.quote {
+   background: url('../images/quote.png') no-repeat transparent;
+}
+
+li.del {
+   background: url('../images/delete.png') no-repeat transparent;
+}
+
+ul.pm_tool li a {
+   display: block;
+   float: left;
+   height: 20px;
+   line-height: 18px;
+   padding: 0 0 0 18px;
+}
