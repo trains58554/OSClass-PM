@@ -88,6 +88,15 @@
         {
             return DB_TABLE_PREFIX.'t_pm_settings';
         }
+        
+        /**
+         * Return table name t_users
+         * @return string
+         */
+        public function getTable_users()
+        {
+            return DB_TABLE_PREFIX.'t_user';
+        }
               
         /**
          * Import sql file
@@ -114,6 +123,22 @@
         }
         
         /**
+         * Get users
+         *
+         * @return array 
+         */
+        public function getUsers()
+        {
+            $this->dao->select();
+            $this->dao->from( $this->getTable_users());
+            $this->dao->where('b_enabled', 1);
+            $this->dao->where('b_active', 1);
+
+            $result = $this->dao->get();
+            return $result->result();
+        }
+        
+        /**
          * Get Sender Messages
          *
          * @param int $itemId
@@ -134,6 +159,30 @@
 
             $result = $this->dao->get();
             return $result->result();
+        }
+        
+        /**
+         * Get by primary key
+         *
+         * @param int $pm_id
+         * @return array 
+         */
+        public function getByPrimaryKey($pm_id, $del=NULL, $orderBy = null, $oDir = null)
+        {
+            $this->dao->select();
+            $this->dao->from( $this->getTable_pmMessages());
+            $this->dao->where('pm_id', $pm_id);
+            if($del == 1) {
+               $this->dao->where('senderDelete', 0);
+               $this->dao->where('recipDelete', 0);
+            }
+            
+            if(!$orderBy == NULL || !$oDir == NULL) {
+               $this->dao->orderBy($orderBy, $oDir);
+            }
+
+            $result = $this->dao->get();
+            return $result->row();
         }
         
         /**
@@ -256,6 +305,27 @@
         public function updateMessageAsRead($pm_id)
         {
             $this->_update( $this->getTable_pmMessages(), array('recipNew' => 0), array('pm_id' => $pm_id)) ;
+        }
+        
+        /**
+         * Get user pm settings
+         *
+         * @param int $user_id
+         */
+        public function getUserPmSettings($user_id)
+        {
+           
+        }
+        
+        /**
+         * Insert a Message
+         *
+         * @param int $sender_id, $recip_id, $senderDelete
+         * @param string $pm_subject, pm_message
+         */
+        public function insertMessage( $sender_id, $recip_id, $pm_subject, $pm_message, $senderDelete = 1)
+        {
+            $this->dao->insert($this->getTable_pmMessages(), array('sender_id' => $sender_id, 'recip_id' => $recip_id, 'pm_subject' => $pm_subject, 'pm_message' => $pm_message, 'senderDelete' => $senderDelete)) ;
         }
         
         /**

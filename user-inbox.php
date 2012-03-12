@@ -10,8 +10,8 @@
         <?php echo osc_private_user_menu(); ?>
     </div>
     <div id="main">
-            <h2><?php _e('Inbox', 'osc_pm'); ?></h2>
-            <form action="<?php echo osc_base_url(true); ?>" method="POST">
+            <h2><?php _e('Inbox', 'osc_pm'); ?></h2> <a href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=0';?>"><?php echo __('Send PM to','osc_pm') . ' ' . pmAdmin(); ?></a><br /><br />
+            <form action="<?php echo osc_base_url() . 'oc-content/plugins/osclass_pm/user-proc.php'; ?>" method="POST">
             <input type="hidden" name="page" value="custom" />
             <input type="hidden" name="file" value="osclass_pm/user-proc.php" />
             <input type="hidden" name="box" value="inbox" />
@@ -29,6 +29,7 @@
                   <tbody>
                   <?php if($recipCount == 0) { ?>
                   <tr class="odd">
+                     <td></td>
                      <td></td>
                      <td><?php _e('You have no messages', 'osc_pm'); ?></td>
                      <td></td>

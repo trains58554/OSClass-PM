@@ -3,7 +3,7 @@
 Plugin Name: Personal Messaging for OSClass
 Plugin URI: 
 Description: A Personal Messaging system for OSClass.
-Version: 1.0
+Version: 0.5
 Author: JChapman
 Author URI: 
 Short Name: osc_pm
@@ -21,7 +21,7 @@ require_once 'ModelPM.php';
        osc_set_preference('sendEmail', '1', 'plugin-osc_pm', 'INTEGER');
        osc_set_preference('maxPMs', '100', 'plugin-osc_pm', 'INTEGER');
        osc_set_preference('pmBlocking', '1', 'plugin-osc_pm', 'INTEGER');
-       osc_set_preference('pmDrafts', '1', 'plugin-osc_pm', 'INTEGER');
+       osc_set_preference('pmDrafts', '0', 'plugin-osc_pm', 'INTEGER');
        osc_set_preference('pmSent', '1', 'plugin-osc_pm', 'INTEGER');
        osc_set_preference('pmAdmin', 'Admin', 'plugin-osc_pm', 'STRING');
     }
@@ -73,17 +73,122 @@ require_once 'ModelPM.php';
     function osc_format_time($date) {
         return date(osc_time_format(), strtotime($date)) ;
     }
+    
+    /**
+     * Get if user is on profile page
+     *
+     * @return boolean
+     */
+    function osc_pm_is_pub_profile() {
+      $location = Rewrite::newInstance()->get_location();
+      $section = Rewrite::newInstance()->get_section();
+      if($location == 'user' && $section == 'pub_profile'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
+    /**
+     * Get if user is on inbox page
+     *
+     * @return boolean
+     */
+    function osc_pm_is_inbox() {
+      $location = Rewrite::newInstance()->get_location();
+      $file     = Params::getParam('file');
+      if($location == 'custom' && $file == 'osclass_pm/user-inbox.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
+    /**
+     * Get if user is on outbox page
+     *
+     * @return boolean
+     */
+    function osc_pm_is_outbox() {
+      $location = Rewrite::newInstance()->get_location();
+      $file     = Params::getParam('file');
+      if($location == 'custom' && $file == 'osclass_pm/user-outbox.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
+    /**
+     * Get if user is on drafts page
+     *
+     * @return boolean
+     */
+    function osc_pm_is_drafts() {
+      $location = Rewrite::newInstance()->get_location();
+      $file     = Params::getParam('file');
+      if($location == 'custom' && $file == 'osclass_pm/user-drafts.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
+    /**
+     * Get if user is on send page
+     *
+     * @return boolean
+     */
+    function osc_pm_is_send() {
+      $location = Rewrite::newInstance()->get_location();
+      $file     = Params::getParam('file');
+      if($location == 'custom' && $file == 'osclass_pm/user-send.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
+    /**
+     * Get if user is on messages page
+     *
+     * @return boolean
+     */
+    function osc_pm_is_messages() {
+      $location = Rewrite::newInstance()->get_location();
+      $file     = rtrim(Params::getParam('file'),'?');
+      if($location == 'custom' && $file == 'osclass_pm/user-messages.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+
 // End HELPERS
+
+// Before HTML 
+
+   function osc_pm_before_html() {
+      if(osc_is_web_user_logged_in()) {
+         $newPMs = ModelPM::newInstance()->getRecipientMessages(osc_logged_user_id(), 1, 1, 'pm_id', 'DESC');
+         $countPMs = count($newPMs);
+      
+         if($countPMs > 0 && $countPMs < 2) {
+            osc_add_flash_ok_message(__('You have','osc_pm') . ' ' . $countPMs . ' ' . __('new Personal Message!','osc_pm'));
+         } elseif($countPMs > 1) {
+            osc_add_flash_ok_message(__('You have','osc_pm') . ' ' . $countPMs . ' ' . __('new Personal Messages!','osc_pm'));
+         } 
+      }
+   }
+   
+// End Before HTML
 
 // Everything between this section is user side related.  
   
     function osc_pm_header() {
+       // Check to see if the page loaded is one of our plugins pages that way 
+       // we only load the javascript when we need it.
+       if(osc_pm_is_inbox() || osc_pm_is_outbox() || osc_pm_is_drafts() || osc_pm_is_send() || osc_pm_is_messages()) {
        ?>
        <link rel="stylesheet" type="text/css" href="<?php echo osc_base_url() .'oc-content/plugins/osclass_pm/css/style.css'; ?>" />
        <link rel="stylesheet" type="text/css" href="<?php echo osc_base_url() .'oc-content/plugins/osclass_pm/css/pmTables.css'; ?>" />
        <script type='text/javascript' src="<?php echo osc_base_url() . 'oc-content/plugins/osclass_pm/js/jquery.dataTables.min.js'; ?>"></script>
        <script type="text/javascript" charset="utf-8">
-			$(document).ready(function() {
+			$(document).ready(function() {			   
 				$('#datatables_pm').dataTable( {
 					"aaSorting": [[ 1, "desc" ]],
 					"bStateSave": true,
@@ -110,11 +215,76 @@ require_once 'ModelPM.php';
 			
 			} );
 		</script>
+		<script type='text/javascript' src="<?php echo osc_base_url() . 'oc-content/plugins/osclass_pm/js/jquery.ui.widget.js'; ?>"></script>
+		<script type='text/javascript' src="<?php echo osc_base_url() . 'oc-content/plugins/osclass_pm/js/jquery.ui.position.js'; ?>"></script>
+		<?php /*<script type="text/javascript" charset="utf-8">
+			
+			$(function() {
+		var availableTags = [
+		 <?php $users = ModelPM::newInstance()->getUsers();  
+		 $uCount = count($users);?>
+       <?php foreach($users as $user) { ?>
+         { label: "<?php echo $user['s_name']; ?>", value: "<?php echo $user['s_name']; ?>" },
+       <?php } ?>
+       { label: "<?php echo pmAdmin(); ?>", value: "<?php echo pmAdmin(); ?>" }
+		];
+		$( "#pmNames" ).autocomplete({
+			source: availableTags,
+			minLength: 2
+		});
+	});
+	</script> */?>
+	<?php /*
+	<script type="text/javascript">  
+    $(document).ready(function(){
+    $("#newMessage-form").submit(function(){
+        $.post(
+            "<?php echo osc_ajax_plugin_url("osclass_pm/user-proc.php");?>",
+            $("#newMessage-form").serialize(),
+            function(data){
+                if (data.success){
+                    $("span#promo-message").css({"color":"green"} );
+                    $("span#promo-message").css({"font-size":"20px"} );
+                }
+                else{
+                    $("span#promo-message").css({"color":"red"});
+                    $("span#promo-message").css({"font-size":"20px"} );
+                }
+                $("span#promo-message").html(data.message);
+            },
+            "json"
+        );
+    });
+});
+    </script>
+    */ ?>
        <?php
+       }
+       if(osc_pm_is_pub_profile() && osc_is_web_user_logged_in()) {
+          $userId = Params::getParam('id');
+          $user = User::newInstance()->findByPrimaryKey($userId);
+          ?>
+          <script type="text/javascript" >
+            $(document).ready(function(){
+               $('#user_data').append("<li><a href=\"<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . $userId . '&mType=new'; ?>\"><?php echo __('Send PM to ','osc_pm') . $user['s_name']; ?></a></li>");
+            });
+          </script>
+          <?php
+       }
+       
+       if(osc_is_ad_page()){
+          $user = User::newInstance()->findByPrimaryKey(osc_item_user_id());
+          ?>
+          <script type="text/javascript" >
+            $(document).ready(function(){
+               $('.name').append("<br /><a href=\"<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Send PM to ','osc_pm') . $user['s_name']; ?></a>");
+            });
+          </script>
+          <?php
+       }
     }
       
-    function osc_pm_user_menu() {
-       $conn = getConnection();       
+    function osc_pm_user_menu() {      
        $newPMs = ModelPM::newInstance()->getRecipientMessages(osc_logged_user_id(), 1, 1, 'pm_id', 'DESC');
        $newPMdrafts = ModelPM::newInstance()->getDrafts(osc_logged_user_id(), 'pm_id', 'DESC');       
        $countPMs = count($newPMs);
@@ -159,6 +329,7 @@ require_once 'ModelPM.php';
     osc_add_hook('header', 'osc_pm_header');
     osc_add_hook('user_menu', 'osc_pm_user_menu', 1);
     osc_add_hook('admin_menu','osc_pm_admin_menu', 1);
+    osc_add_hook('before_html','osc_pm_before_html');
     
     
 ?>
