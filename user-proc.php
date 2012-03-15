@@ -110,6 +110,39 @@ switch(Params::getParam('option')){
     	       <script>location.href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-inbox.php'; ?>"</script>
     	      <?php
          break;
+         case 'adminReply':
+            if($subject == '') {
+               $subject = '[No subject]';
+            }
+            if (stripos($subject,'Re:') === false) {
+               $subject = 'Re: ' . $subject;
+            }
+            ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+            osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'),'admin');
+            // HACK TO DO A REDIRECT ?>
+    	       <script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-inbox.php'; ?>"</script>
+    	      <?php
+         break;
+         case 'adminQuote':
+            if($subject == '') {
+               $subject = '[No subject]';
+            }
+            if (stripos($subject,'Re:') === false) {
+               $subject = 'Re: ' . $subject;
+            }
+            ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+            osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'),'admin');
+            // HACK TO DO A REDIRECT ?>
+    	       <script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-inbox.php'; ?>"</script>
+    	      <?php
+         break;
+         case 'adminNew':
+            ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+            osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'),'admin');
+            // HACK TO DO A REDIRECT ?>
+    	       <script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-inbox.php'; ?>"</script>
+    	      <?php
+         break;
       }
    break;  
    case 'userSettings':

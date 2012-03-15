@@ -45,8 +45,8 @@
                   <?php echo __('Sent to: ','osclass_pm') . $user['s_name'] . ' ' . __('on: ','osclass_pm') . osc_format_date($pm['message_date']) . ', ' . osclass_pm_format_time($pm['message_date']); ?>
                </div> 
                <ul class="reset pm_tool">
-                  <li class="reply"><a href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-send.php&mType=reply&messId=' . $pm_id . '&userId=' . $pm['sender_id']; ?>" ><?php _e('Reply','osclass_pm'); ?></a></li>
-                  <li class="quote"><a href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-send.php&mType=quote&messId=' . $pm_id . '&userId=' . $pm['sender_id']; ?>" ><?php _e('Quote','osclass_pm'); ?></a></li>
+                  <li class="reply"><a href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-send.php&mType=adminReply&messId=' . $pm_id . '&userId=' . $pm['sender_id']; ?>" ><?php _e('Reply','osclass_pm'); ?></a></li>
+                  <li class="quote"><a href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-send.php&mType=adminQuote&messId=' . $pm_id . '&userId=' . $pm['sender_id']; ?>" ><?php _e('Quote','osclass_pm'); ?></a></li>
                   <li class="del"><a onclick="if (!confirm('<?php _e('Are you sure you want to delete this personal messages?','osclass_pm'); ?>')) return false;" href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/user-proc.php&pms=' . $pm['pm_id'] . '&option=delMessages&box=adminInbox'; ?>" ><?php _e('Delete','osclass_pm'); ?></a></li>
                </ul>              
             </div>
