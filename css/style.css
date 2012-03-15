@@ -141,3 +141,16 @@ ul.pm_tool li a {
 #replyMess {
    padding-top: 5px;
 }
+
+/* user-pm-settings.php */
+td.pmSettingsSave {
+   text-align: right;
+}
+
+table.pmSettings tr {
+   height: 35px;
+}
+
+table.pmSettings td {
+   width: 50%;
+}

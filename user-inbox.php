@@ -4,13 +4,13 @@
 ?>
 <div class="content user_account">
     <h1>
-        <strong><?php _e('Inbox', 'osc_pm'); ?></strong>
+        <strong><?php _e('Inbox', 'osclass_pm'); ?></strong>
     </h1>
     <div id="sidebar">
         <?php echo osc_private_user_menu(); ?>
     </div>
     <div id="main">
-            <h2><?php _e('Inbox', 'osc_pm'); ?></h2> <a href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=0';?>"><?php echo __('Send PM to','osc_pm') . ' ' . pmAdmin(); ?></a><br /><br />
+            <h2><?php _e('Inbox', 'osclass_pm'); ?></h2> <a href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=0&mType=new';?>"><?php echo __('Send PM to','osclass_pm') . ' ' . pmAdmin(); ?></a><br /><br />
             <form action="<?php echo osc_base_url() . 'oc-content/plugins/osclass_pm/user-proc.php'; ?>" method="POST">
             <input type="hidden" name="page" value="custom" />
             <input type="hidden" name="file" value="osclass_pm/user-proc.php" />
@@ -21,9 +21,9 @@
                  	<thead>
                    <tr>
                      <th width="4%"><input name="checkAll" id="checkAll" type="checkbox" /></th>
-                   	<th width="25%"><?php _e('Date','osc_pm'); ?></th>
-                   	<th width="54%"><?php _e('Subject','osc_pm'); ?></th>
-                   	<th><?php _e('From','osc_pm'); ?></th>
+                   	<th width="25%"><?php _e('Date','osclass_pm'); ?></th>
+                   	<th width="54%"><?php _e('Subject','osclass_pm'); ?></th>
+                   	<th><?php _e('From','osclass_pm'); ?></th>
                    </tr>
                   </thead>
                   <tbody>
@@ -31,7 +31,7 @@
                   <tr class="odd">
                      <td></td>
                      <td></td>
-                     <td><?php _e('You have no messages', 'osc_pm'); ?></td>
+                     <td><?php _e('You have no messages', 'osclass_pm'); ?></td>
                      <td></td>
                   </tr>
                   <?php } else { ?>
@@ -56,7 +56,7 @@
                               $user = User::newInstance()->findByPrimaryKey($recipPM['sender_id']); 
                             } else{ $user['s_name'] = pmAdmin();} ?>
                         <td class="pmCheckboxes"><input class="delChecks" type="checkbox" id="delete<?php echo $recipPM['pm_id']; ?>" name="pms[]" value="<?php echo $recipPM['pm_id']; ?>" /></td>
-                        <td class="<?php echo $styleNew; ?>"><?php echo osc_format_date($recipPM['message_date']) . ', ' . osc_format_time($recipPM['message_date']); ?></td>
+                        <td class="<?php echo $styleNew; ?>"><?php echo osc_format_date($recipPM['message_date']) . ', ' . osclass_pm_format_time($recipPM['message_date']); ?></td>
                         <td class="<?php echo $styleNew; ?>"><a class="mesLink" href="<?php echo osc_render_file_url(osc_plugin_folder(__FILE__) . 'user-messages.php?message=' . $recipPM['pm_id'] . '&box=inbox'); ?>"><?php echo $recipPM['pm_subject']; ?></a></td>
                         <td class="<?php echo $styleNew; ?>"><?php echo $user['s_name']; ?></td>
                       </tr>
@@ -65,7 +65,7 @@
                   </tbody>
                   <tfoot>
                      <tr>
-                        <td colspan="2"><button class="pmDeleteButton" onclick="if (!confirm('<?php _e('Are you sure you want to delete all selected personal messages?','osc_pm'); ?>')) return false;" type="submit"><?php _e('Remove Selected','osc_pm'); ?></button></td>
+                        <td colspan="2"><button class="pmDeleteButton" onclick="if (!confirm('<?php _e('Are you sure you want to delete all selected personal messages?','osclass_pm'); ?>')) return false;" type="submit"><?php _e('Remove Selected','osclass_pm'); ?></button></td>
                      </tr>
                   </tfoot>
                 </table>

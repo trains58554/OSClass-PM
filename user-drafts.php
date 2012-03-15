@@ -5,7 +5,7 @@ $countPMdrafts = count($newPMdrafts);
 ?>
 <div class="content user_account">
     <h1>
-        <strong><?php echo __('Drafts', 'osc_pm') . ' (' . $countPMdrafts . ')'; ?></strong>
+        <strong><?php echo __('Drafts', 'osclass_pm') . ' (' . $countPMdrafts . ')'; ?></strong>
     </h1>
     <div id="sidebar">
         <?php echo osc_private_user_menu(); ?>

@@ -314,7 +314,22 @@
          */
         public function getUserPmSettings($user_id)
         {
-           
+           $this->dao->select();
+           $this->dao->from( $this->getTable_pmSettings());
+           $this->dao->where('fk_i_user_id', $user_id);
+
+           $result = $this->dao->get();
+           return $result->row();
+        }
+        
+        /**
+         * update user pm settings
+         *
+         * @param int $user_id, $emailAlert, $flashAlert, $saveSent
+         */
+        public function updatePmSettings($user_id, $emailAlert, $flashAlert, $saveSent)
+        {
+            $this->_update( $this->getTable_pmSettings(), array('send_email' => $emailAlert, 'flash_alert' => $flashAlert, 'save_sent' => $saveSent), array('fk_i_user_id' => $user_id)) ;
         }
         
         /**
@@ -326,6 +341,20 @@
         public function insertMessage( $sender_id, $recip_id, $pm_subject, $pm_message, $senderDelete = 1)
         {
             $this->dao->insert($this->getTable_pmMessages(), array('sender_id' => $sender_id, 'recip_id' => $recip_id, 'pm_subject' => $pm_subject, 'pm_message' => $pm_message, 'senderDelete' => $senderDelete)) ;
+        }
+        
+        
+        /**
+         * Insert all users into pmsettings
+         *
+         * 
+         */
+        public function insertUsersPmSettings()
+        {
+            $userIds = $this->getUsers();
+            foreach($userIds as $user_id) {
+               $this->dao->insert($this->getTable_pmSettings(), array('fk_i_user_id' => $user_id['pk_i_id'], 'send_email' => 1, 'flash_alert' => '0', 'save_sent' => '0')) ;
+            }
         }
         
         /**

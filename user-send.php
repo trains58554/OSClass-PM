@@ -4,7 +4,9 @@ if(osc_is_web_user_logged_in()) {
    $itemId = Params::getParam('itemId');
    $mType  = Params::getParam('mType');
    $messId = Params::getParam('messId');
+   
    $pm = ModelPM::newInstance()->getByPrimaryKey($messId, 0);
+   
    if($userId == 0 && $userId !='') {
       $user['s_name'] = pmAdmin();
    } else {
@@ -17,7 +19,7 @@ if(osc_is_web_user_logged_in()) {
 
 <div class="content user_account">
     <h1>
-        <strong><?php echo __('New message', 'osc_pm'); ?></strong>
+        <strong><?php echo __('New message', 'osclass_pm'); ?></strong>
     </h1>
     <div id="sidebar">
         <?php echo osc_private_user_menu(); ?>
@@ -37,7 +39,7 @@ if(osc_is_web_user_logged_in()) {
             <div class="pm_tools">
                <table>
                   <tr>
-                     <td><?php _e('To: ','osc_pm'); ?></td>
+                     <td><?php _e('To: ','osclass_pm'); ?></td>
                      <td>
                         <input tabindex="1" id="pmNames" readonly="readonly" type="text" <?php if(isset($user)){echo 'value="' . $user['s_name'] . '"';} ?> />
                         <input name="recipId" type="hidden" value="<?php echo $userId;?>" />
@@ -52,19 +54,19 @@ if(osc_is_web_user_logged_in()) {
                   </tr>
                   <tr><td>&nbsp;</td><td></td></tr>
                   <tr class="subject">
-                     <td><?php _e('Subject: ','osc_pm'); ?>&nbsp;</td>
-                     <td><input tabindex="2" type="textbox" maxlength="60" size="60" name="subject" id="subject" value="<?php if(@$item != ''){echo @$item['s_title'];}elseif($mType == 'reply' || $mType == 'quote'){echo $pm['pm_subject'];}else{ _e('[No subject]','OSC_PM');} ?>" /></td>
+                     <td><?php _e('Subject: ','osclass_pm'); ?>&nbsp;</td>
+                     <td><input tabindex="2" type="textbox" maxlength="60" size="60" name="subject" id="subject" value="<?php if(@$item != ''){echo 'Item: ' . @$item['s_title'];}elseif($mType == 'reply' || $mType == 'quote'){echo $pm['pm_subject'];}else{ _e('[No subject]','osclass_pm');} ?>" /></td>
                   </tr>
                </table>
             </div>
             <div class="pm_mess">
-               <textarea tabindex="3" cols="80" rows="12" name="message" id="description"><?php if($mType == 'quote') {echo '[quote][quoteAuthor]' . __('Quote from:','osc_pm') . ' ' . $user['s_name'] . ' ' . __('on: ','osc_pm') . osc_format_date($pm['message_date']) . ', ' . osc_format_time($pm['message_date']) . "[/quoteAuthor]\n" . $pm['pm_message'] . "\n[/quote]";} ?></textarea>
+               <textarea tabindex="3" cols="80" rows="12" name="message" id="description"><?php if($mType == 'quote') {echo '[quote][quoteAuthor]' . __('Quote from:','osclass_pm') . ' ' . $user['s_name'] . ' ' . __('on: ','osclass_pm') . osc_format_date($pm['message_date']) . ', ' . osclass_pm_format_time($pm['message_date']) . "[/quoteAuthor]\n" . $pm['pm_message'] . "\n[/quote]";} ?></textarea>
                <br />
                <p>
-               <label for="outbox"><input tabindex="4" type="checkbox" class="input_check"  tabindex="5" value="1" id="outbox" name="outbox"><?php _e(' Save a copy in my outbox','osc_pm'); ?></label>
+               <label for="outbox"><input tabindex="4" type="checkbox" class="input_check"  tabindex="5" value="1" id="outbox" name="outbox"><?php _e(' Save a copy in my outbox','osclass_pm'); ?></label>
                </p>
                <p id="sendMessage">
-					    <input tabindex="5" type="submit" class="button_submit" accesskey="s"  tabindex="6" value="<?php _e('Send message','osc_pm'); ?>">
+					    <input tabindex="5" type="submit" class="button_submit" accesskey="s"  tabindex="6" value="<?php _e('Send message','osclass_pm'); ?>">
 				   </p>
             </div>
             <?php if($mType == 'reply' || $mType == 'quote') {?>
@@ -74,8 +76,8 @@ if(osc_is_web_user_logged_in()) {
                $message  = osc_mailBeauty($pm['pm_message'], $words) ;
             ?>
             <div class="pm_mess">
-               <h3><?php echo __('Subject:','osc_pm') . ' ' . $pm['pm_subject']; ?></h3>
-               <p id="fromPM"><?php echo __('From:','osc_pm') . ' ' . $user['s_name'] . ' ' . __('on: ','osc_pm') . osc_format_date($pm['message_date']) . ', ' . osc_format_time($pm['message_date']); ?></p>
+               <h3><?php echo __('Subject:','osclass_pm') . ' ' . $pm['pm_subject']; ?></h3>
+               <p id="fromPM"><?php echo __('From:','osclass_pm') . ' ' . $user['s_name'] . ' ' . __('on: ','osclass_pm') . osc_format_date($pm['message_date']) . ', ' . osclass_pm_format_time($pm['message_date']); ?></p>
                <p id="replyMess">
                   <?php echo nl2br($message); ?>
                </p>
