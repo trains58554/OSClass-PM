@@ -343,6 +343,8 @@ require_once 'ModelPM.php';
 
     function osclass_pm_admin_footer() {
        ?>
+              <link rel="stylesheet" type="text/css" href="<?php echo osc_base_url() .'oc-content/plugins/osclass_pm/css/style.css'; ?>" />
+       <link rel="stylesheet" type="text/css" href="<?php echo osc_base_url() .'oc-content/plugins/osclass_pm/css/pmTables.css'; ?>" />
        <script type="text/javascript" >
          $(document).ready(function(){
             $('#datatables_quick_edit').prepend("<a href=\"<?php echo osc_admin_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Send PM','osclass_pm'); ?></a> | ");

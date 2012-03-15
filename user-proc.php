@@ -53,6 +53,21 @@ switch(Params::getParam('option')){
     	<?php
          //header("Location: " . osc_base_url(true) . '?page=custom&file=osclass_pm/user-outbox.php');
       break;
+      case 'adminOutbox':
+         $pmDelIds = Params::getParam('pms');
+         if (!is_array($pmDelIds)) {
+            ModelPM::newInstance()->updateMessagesSenderDelete($pmDelIds);
+         } else {
+            foreach($pmDelIds as $pmDelId){
+               ModelPM::newInstance()->updateMessagesSenderDelete($pmDelId);
+            }
+         }
+         osc_add_flash_ok_message(__('Messages deleted!','osclass_pm'),'admin');
+         // HACK TO DO A REDIRECT ?>
+    	<script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-outbox.php'; ?>"</script>
+    	<?php
+         //header("Location: " . osc_base_url(true) . '?page=custom&file=osclass_pm/user-outbox.php');
+      break;
    }
    break;
    case 'send':
