@@ -1,7 +1,7 @@
 <?php
     //set include
-    define('ABS_PATH', dirname(dirname(dirname(dirname(__FILE__)))) . '/');
-    require_once ABS_PATH . 'oc-load.php'; 
+    define('ABS_PATHS', dirname(dirname(dirname(dirname(__FILE__)))) . '/');
+    require_once ABS_PATHS . 'oc-load.php'; 
     
 switch(Params::getParam('option')){
    case 'delMessages':
@@ -33,7 +33,7 @@ switch(Params::getParam('option')){
          }
          osc_add_flash_ok_message(__('Messages deleted!','osclass_pm'), 'admin');
          // HACK TO DO A REDIRECT ?>
-    	<script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/user-inbox.php'; ?>"</script>
+    	<script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-inbox.php'; ?>"</script>
     	<?php
          //header("Location: " . osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-inbox.php');
       
@@ -85,6 +85,19 @@ switch(Params::getParam('option')){
                $subject = 'Re: ' . $subject;
             }
             ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+            
+            
+               $pm_info = array();
+               $pm_info = array('pm_id' => ModelPM::newInstance()->getLastMessageId(), 'sender_id' => $sender_id, 'recip_id' => $recip_id, 'pm_subject' => $subject, 'pm_message' => $message);
+               if(sendEmail() && pmEmailAlert($recip_id)){
+                  new_pm_email($pm_info);
+               }
+               
+               if(sendEmail() && $recip_id == 0){ 
+                  new_pm_email($pm_info);
+               }
+            
+            
             osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'));
             // HACK TO DO A REDIRECT ?>
     	       <script>location.href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-inbox.php'; ?>"</script>
@@ -98,6 +111,17 @@ switch(Params::getParam('option')){
                $subject = 'Re: ' . $subject;
             }
             ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+            
+               $pm_info = array();
+               $pm_info = array('pm_id' => ModelPM::newInstance()->getLastMessageId(), 'sender_id' => $sender_id, 'recip_id' => $recip_id, 'pm_subject' => $subject, 'pm_message' => $message);
+               if(sendEmail() && pmEmailAlert($recip_id)){
+                  new_pm_email($pm_info);
+               }
+               
+               if(sendEmail() && $recip_id == 0){ 
+                  new_pm_email($pm_info);
+               }
+               
             osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'));
             // HACK TO DO A REDIRECT ?>
     	       <script>location.href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-inbox.php'; ?>"</script>
@@ -105,6 +129,17 @@ switch(Params::getParam('option')){
          break;
          case 'new':
             ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+            
+               $pm_info = array();
+               $pm_info = array('pm_id' => ModelPM::newInstance()->getLastMessageId(), 'sender_id' => $sender_id, 'recip_id' => $recip_id, 'pm_subject' => $subject, 'pm_message' => $message);
+               if(sendEmail() && pmEmailAlert($recip_id)){
+                  new_pm_email($pm_info);
+               }
+               
+               if(sendEmail() && $recip_id == 0){ 
+                  new_pm_email($pm_info);
+               }
+               
             osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'));
             // HACK TO DO A REDIRECT ?>
     	       <script>location.href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-inbox.php'; ?>"</script>
@@ -118,6 +153,17 @@ switch(Params::getParam('option')){
                $subject = 'Re: ' . $subject;
             }
             ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+            
+               $pm_info = array();
+               $pm_info = array('pm_id' => ModelPM::newInstance()->getLastMessageId(), 'sender_id' => $sender_id, 'recip_id' => $recip_id, 'pm_subject' => $subject, 'pm_message' => $message);
+               if(sendEmail() && pmEmailAlert($recip_id)){
+                  new_pm_email($pm_info);
+               }
+               
+               if(sendEmail() && $recip_id == 0){ 
+                  new_pm_email($pm_info);
+               }
+               
             osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'),'admin');
             // HACK TO DO A REDIRECT ?>
     	       <script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-inbox.php'; ?>"</script>
@@ -131,6 +177,17 @@ switch(Params::getParam('option')){
                $subject = 'Re: ' . $subject;
             }
             ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+               
+               $pm_info = array();
+               $pm_info = array('pm_id' => ModelPM::newInstance()->getLastMessageId(), 'sender_id' => $sender_id, 'recip_id' => $recip_id, 'pm_subject' => $subject, 'pm_message' => $message);
+               if(sendEmail() && pmEmailAlert($recip_id)){
+                  new_pm_email($pm_info);
+               }
+               
+               if(sendEmail() && $recip_id == 0){ 
+                  new_pm_email($pm_info);
+               }
+               
             osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'),'admin');
             // HACK TO DO A REDIRECT ?>
     	       <script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-inbox.php'; ?>"</script>
@@ -138,6 +195,17 @@ switch(Params::getParam('option')){
          break;
          case 'adminNew':
             ModelPM::newInstance()->insertMessage($sender_id, $recip_id, $subject, $message, $saveOutbox);
+            
+               $pm_info = array();
+               $pm_info = array('pm_id' => ModelPM::newInstance()->getLastMessageId(), 'sender_id' => $sender_id, 'recip_id' => $recip_id, 'pm_subject' => $subject, 'pm_message' => $message);
+               if(sendEmail() && pmEmailAlert($recip_id)){
+                  new_pm_email($pm_info);
+               }
+               
+               if(sendEmail() && $recip_id == 0){ 
+                  new_pm_email($pm_info);
+               }
+               
             osc_add_flash_ok_message(__('Your Message has been Sent!','osclass_pm'),'admin');
             // HACK TO DO A REDIRECT ?>
     	       <script>location.href="<?php echo osc_admin_base_url(true) . '?page=plugins&action=renderplugin&file=osclass_pm/admin-inbox.php'; ?>"</script>
@@ -157,4 +225,5 @@ switch(Params::getParam('option')){
     	<?php
    break;   
 }
+
 ?>

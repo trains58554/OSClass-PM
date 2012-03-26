@@ -1,65 +1,64 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: OSClass Pm\n"
+"Project-Id-Version: Counter\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-14 14:49-0600\n"
+"POT-Creation-Date: 2012-03-26 16:02-0600\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Jay Chapman <siouxfallsrummages@gmail.com>\n"
-"Language-Team: JChapman\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: English\n"
-"X-Poedit-Country: United States\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: /var/www/oc-content/plugins/osclass_pm\n"
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:22
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:30
 msgid "New message"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:42
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:50
 msgid "To: "
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:57
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:65
 msgid "Subject: "
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:58
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:66
 msgid "[No subject]"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:63
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:71
 msgid "Quote from:"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:63
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:80
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:71
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:90
 #: /var/www/oc-content/plugins/osclass_pm/user-messages.php:50
 msgid "on: "
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:66
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:75
 msgid " Save a copy in my outbox"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:69
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:79
 msgid "Send message"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:79
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:89
 msgid "Subject:"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-send.php:80
+#: /var/www/oc-content/plugins/osclass_pm/user-send.php:90
 msgid "From:"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:7
-#: /var/www/oc-content/plugins/osclass_pm/index.php:331
+#: /var/www/oc-content/plugins/osclass_pm/index.php:343
 msgid "PM Settings"
 msgstr ""
 
@@ -69,13 +68,13 @@ msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:23
 #: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:32
-#: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:41
+#: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:42
 msgid "Always"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:24
 #: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:33
-#: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:42
+#: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:43
 msgid "Never"
 msgstr ""
 
@@ -83,11 +82,11 @@ msgstr ""
 msgid "Show a flash message when you have new personal messages"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:38
+#: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:39
 msgid "Save a copy of each personal message in your outbox by default"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:48
+#: /var/www/oc-content/plugins/osclass_pm/user-pm-settings.php:50
 msgid "Save Settings"
 msgstr ""
 
@@ -121,114 +120,237 @@ msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-outbox.php:7
 #: /var/www/oc-content/plugins/osclass_pm/user-outbox.php:13
-#: /var/www/oc-content/plugins/osclass_pm/index.php:329
-#: /var/www/oc-content/plugins/osclass_pm/index.php:370
+#: /var/www/oc-content/plugins/osclass_pm/admin-outbox.php:5
+#: /var/www/oc-content/plugins/osclass_pm/index.php:341
+#: /var/www/oc-content/plugins/osclass_pm/index.php:414
 msgid "Outbox"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-outbox.php:24
+#: /var/www/oc-content/plugins/osclass_pm/admin-outbox.php:17
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:24
 msgid "Date"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-outbox.php:25
+#: /var/www/oc-content/plugins/osclass_pm/admin-outbox.php:18
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:25
 msgid "Subject"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-outbox.php:26
+#: /var/www/oc-content/plugins/osclass_pm/admin-outbox.php:19
 msgid "Sent To"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-outbox.php:34
+#: /var/www/oc-content/plugins/osclass_pm/admin-outbox.php:27
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:34
 msgid "You have no messages"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-outbox.php:62
+#: /var/www/oc-content/plugins/osclass_pm/admin-outbox.php:55
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:68
 msgid "Are you sure you want to delete all selected personal messages?"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-outbox.php:62
+#: /var/www/oc-content/plugins/osclass_pm/admin-outbox.php:55
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:68
 msgid "Remove Selected"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:202
-#: /var/www/oc-content/plugins/osclass_pm/index.php:204
+#: /var/www/oc-content/plugins/osclass_pm/index.php:207
+msgid "Sorry the selected user's inbox is full! Please try again later."
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/index.php:214
+#: /var/www/oc-content/plugins/osclass_pm/index.php:216
 msgid "You have"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:202
+#: /var/www/oc-content/plugins/osclass_pm/index.php:214
 msgid "new Personal Message!"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:204
+#: /var/www/oc-content/plugins/osclass_pm/index.php:216
 msgid "new Personal Messages!"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:300
-#: /var/www/oc-content/plugins/osclass_pm/index.php:311
+#: /var/www/oc-content/plugins/osclass_pm/index.php:312
+#: /var/www/oc-content/plugins/osclass_pm/index.php:323
 msgid "Send PM to "
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:324
-#: /var/www/oc-content/plugins/osclass_pm/index.php:366
+#: /var/www/oc-content/plugins/osclass_pm/index.php:336
+#: /var/www/oc-content/plugins/osclass_pm/index.php:410
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:7
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:13
 msgid "Inbox"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:326
-#: /var/www/oc-content/plugins/osclass_pm/index.php:368
+#: /var/www/oc-content/plugins/osclass_pm/index.php:338
+#: /var/www/oc-content/plugins/osclass_pm/index.php:412
 msgid "Drafts"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:348
+#: /var/www/oc-content/plugins/osclass_pm/index.php:362
 msgid "Send PM"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:364
+#: /var/www/oc-content/plugins/osclass_pm/index.php:408
 msgid "'s PM Box"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:364
+#: /var/www/oc-content/plugins/osclass_pm/index.php:408
 msgid "New"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:372
+#: /var/www/oc-content/plugins/osclass_pm/index.php:416
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:75
 msgid "OSClass PM Settings"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:374
+#: /var/www/oc-content/plugins/osclass_pm/index.php:418
 msgid "Configure"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/index.php:375
+#: /var/www/oc-content/plugins/osclass_pm/index.php:419
 msgid "F.A.Q. / Help"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:13
-msgid "Send PM to"
+msgid "Send PM to the"
 msgstr ""
 
 #: /var/www/oc-content/plugins/osclass_pm/user-inbox.php:26
 msgid "From"
 msgstr ""
 
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:61
+msgid "Settings Saved"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:77
+msgid "Settings"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:78
+msgid "Admin's user name: (default: Admin)"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:82
+msgid "Enable sending of email notification of new PM"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:84
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:99
+msgid "Yes"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:85
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:100
+msgid "No"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:97
+msgid "Enable the Outbox"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:105
+msgid "Advanced PM Settings"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:106
+msgid "Max number of PM's a user can have in there inbox"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:110
+msgid "Permanently delete deleted Personal Messages"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:112
+msgid "Hourly"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:113
+msgid "Daily"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:114
+msgid "Weekly"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:120
+msgid "Save"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:122
+msgid "Version "
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/admin.php:122
+msgid "Author"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:28
+msgid "Personal Messaging for OSClass Help/FAQ"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:31
+msgid "What is the Personal Messaging for OSClass Plugin?"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:34
+msgid "The Personal Messaging for OSClass Plugin is an in house messaging system. It is a lot like the PM system on the OSClass forums."
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:37
+msgid "Do I need to edit any files for the Personal Messaging for OSClass plugin to work?"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:40
+msgid "No, All all the links are added with javascript."
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:43
+msgid "Where will the PM links show up at?"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:46
+msgid "You will see a PM link on the item page and the profile page of the user."
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:49
+msgid "How do I edit the email templates?"
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:52
+msgid "To edit the email templates you have to go under the Email & Alerts menu. Then you will see towards the end of the list <b>email_PM_alert</b>."
+msgstr ""
+
+#: /var/www/oc-content/plugins/osclass_pm/help.php:55
+msgid "What are the dynamic tags that can be used in the \"email_PM_alert\" template?"
+msgstr ""
+
 #: /var/www/oc-content/plugins/osclass_pm/user-proc.php:18
 #: /var/www/oc-content/plugins/osclass_pm/user-proc.php:34
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:50
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:65
 msgid "Messages deleted!"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:57
-#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:70
-#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:77
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:101
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:125
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:143
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:167
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:191
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:209
 msgid "Your Message has been Sent!"
 msgstr ""
 
-#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:90
+#: /var/www/oc-content/plugins/osclass_pm/user-proc.php:222
 msgid "Your Settings have been saved!"
 msgstr ""
 

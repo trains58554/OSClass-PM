@@ -238,6 +238,28 @@
         }
         
         /**
+         * count Recipient Messages
+         *
+         * @param int $itemId
+         * @return array 
+         */
+        public function countRecipientMessages($recipId, $del=NULL)
+        {
+            $this->dao->select();
+            $this->dao->from( $this->getTable_pmMessages());
+            $this->dao->where('recip_id', $recipId);
+            if($del == 1) {
+               $this->dao->where('recipDelete', 0);
+            }
+            
+
+            $result = $this->dao->get();
+            $aux = $result->result();
+            $aux = count($aux);
+            return $aux;
+        }
+        
+        /**
          * Get Recipient Message
          *
          * @param int $itemId
@@ -357,308 +379,69 @@
             }
         }
         
-        /**
-         * Get all car makes 
+        /** 
+         * Adds email templstes.
          *
-         * @return array 
-         */
-        public function getCarMakes()
-        {
-            $this->dao->select();
-            $this->dao->from( $this->getTable_CarMake() ) ;
-            $this->dao->orderBy('s_name', 'ASC') ;
-            
-            $results = $this->dao->get();
-            return $results->result();
-        }
-        
-        /**
-         * Get Make attributes given a make id
          *
-         * @param int $id 
-         * @return array
          */
-        public function getCarMakeById( $id )
-        {
-            $this->dao->select();
-            $this->dao->from( $this->getTable_CarMake());
-            $this->dao->where('pk_i_id', $id );
+        public function insertEmailTemplates() {
+            //used for email template
+            $this->dao->insert(DB_TABLE_PREFIX.'t_pages', array('s_internal_name' => 'email_PM_alert', 'b_indelible' => 1, 'dt_pub_date' => date('Ydm')));
             
+            $this->dao->select();
+            $this->dao->from( DB_TABLE_PREFIX.'t_pages' );
+            $this->dao->where('s_internal_name', 'email_PM_alert');
+
             $result = $this->dao->get();
-            return $result->row();
-        }
-        
-        /**
-         * Get all car models given a make id
-         *
-         * @param int $makeId
-         * @return array
-         */
-        public function getCarModels( $makeId )
-        {
-            $this->dao->select();
-            $this->dao->from( $this->getTable_CarModel() ) ;
-            $this->dao->where('fk_i_make_id', $makeId) ;
-            $this->dao->orderBy('s_name', 'ASC') ;
+            $pageInfo = $result->row();
             
-            $results = $this->dao->get();
-            return $results->result();
-        }
-        
-        /**
-         * Get Model attributes given a model id
-         *
-         * @param int $id 
-         * @return array
-         */
-        public function getCarModelById( $id )
-        {
-            $this->dao->select();
-            $this->dao->from( $this->getTable_CarModel());
-            $this->dao->where('pk_i_id', $id );
-            
-            $result = $this->dao->get();
-            return $result->row();
-        }
-        
-        /**
-         * Get all vehicle types, if locale is set, results are filtered by given locale
-         *
-         * @param string $locale
-         * @return array
-         */
-        public function getVehiclesType( $locale = null )
-        {
-            $this->dao->select() ;
-            $this->dao->from( $this->getTable_CarVehicleType() ) ;
-            if(!is_null($locale) ){
-                $this->dao->where('fk_c_locale_code', $locale) ;
+            foreach(osc_listLanguageCodes() as $locales) {
+               $this->dao->insert(DB_TABLE_PREFIX.'t_pages_description', array('fk_i_pages_id' => $pageInfo['pk_i_id'], 'fk_c_locale_code' => $locales, 's_title' => '{WEB_TITLE} - You just received a PM from {SENDER_NAME}.', 's_text' => "<p>Hi {RECIP_NAME}!</p>\r\n<p> </p>\r\n<p>{SENDER_NAME} has just sent you a PM.</p>\r\n<p>The message they sent you was:</p>\r\n<p>{PM_SUBJECT}</p>\r\n<p>{PM_MESSAGE}</P>\r\n<p>Reply to the message here: {PM_URL}</p>\r\n<p>This is an automatic email, Please do not respond to this email.</p>\r\n<p> </p>\r\n<p>Thanks</p>\r\n<p>{WEB_TITLE}</p>"));
             }
-            
-            $results = $this->dao->get();
-            return $results->result();
         }
         
         /**
-         * Get Vehicle type attributes given a Vehicle type id
+         * Remove Email Templates
          *
-         * @param int $id 
-         * @return array
+         *
          */
-        public function getVehicleTypeById( $id )
-        {
+        public function removeEmailTemplates() {
             $this->dao->select();
-            $this->dao->from( $this->getTable_CarVehicleType());
-            $this->dao->where('pk_i_id', $id );
-            
+            $this->dao->from( DB_TABLE_PREFIX.'t_pages' );
+            $this->dao->where('s_internal_name', 'email_PM_alert');
+
             $result = $this->dao->get();
-            return $result->row();
+            $pageInfo = $result->row();
+            
+            $this->dao->delete( DB_TABLE_PREFIX.'t_pages_description', array('fk_i_pages_id' => $pageInfo['pk_i_id']));
+            $this->dao->delete( DB_TABLE_PREFIX.'t_pages', array('pk_i_id' => $pageInfo['pk_i_id']));
         }
         
+        /**
+         * Cron remove sender and recip messages if both are deleted.
+         *
+         *
+         */
+        public function deleteMessages() 
+        {
+            $this->dao->delete( $this->getTable_pmMessages(), array('senderDelete' => 1, 'recipDelete' => 1));
+        }
+               
         /**
          * Return last id inserted into cars vehicle type table
          * 
          * @return int 
          */
-        public function getLastVehicleTypeId()
+        public function getLastMessageId()
         {
-            $this->dao->select('pk_i_id');
-            $this->dao->from($this->getTable_CarVehicleType()) ;
-            $this->dao->orderBy('pk_i_id', 'DESC') ;
+            $this->dao->select('pm_id');
+            $this->dao->from($this->getTable_pmMessages()) ;
+            $this->dao->orderBy('pm_id', 'DESC') ;
             $this->dao->limit(1) ;
             
             $result = $this->dao->get() ;
             $aux = $result->row();
-            return $aux['pk_i_id']; 
-        }
-        
-        /**
-         * Insert Car attributes 
-         * 
-         * @param array $arrayInsert 
-         */
-        public function insertCarAttr( $arrayInsert, $itemId )
-        {
-            $aSet = $this->toArrayInsert($arrayInsert);
-            $aSet['fk_i_item_id'] = $itemId;
-            
-            $this->dao->insert( $this->getTable_CarAttr(), $aSet) ;
-        }
-        
-        /**
-         * Insert a Make
-         *
-         * @param string $name 
-         */
-        public function insertMake( $name )
-        {
-            $this->dao->insert($this->getTable_CarMake(), array('s_name' => $name)) ;
-        }
-        
-        /**
-         * Insert a Model given Make id 
-         *
-         * @param int $makeId
-         * @param string $name 
-         */
-        public function insertModel( $makeId, $name )
-        {
-            $aSet = array(
-                'fk_i_make_id'  => $makeId,
-                's_name'        => $name
-            );
-            $this->dao->insert($this->getTable_CarModel(), $aSet );
-        }
-        
-        /**
-         * Insert a Vehicle type
-         *
-         * @param int $typeId
-         * @param string $locale
-         * @param string $name 
-         */
-        public function insertVehicleType($typeId, $locale, $name)
-        {
-            $aSet = array(
-                'pk_i_id'           => $typeId,
-                'fk_c_locale_code'  => $locale,
-                's_name'            => $name
-            );
-            $this->dao->insert($this->getTable_CarVehicleType(), $aSet) ;
-        }
-        
-        /**
-         * Update Car attributes given a item id
-         * 
-         * @param type $arrayUpdate 
-         */
-        public function updateCarAttr( $arrayUpdate, $itemId )
-        {
-            $aUpdate = $this->toArrayInsert($arrayUpdate) ;
-            $this->_update( $this->getTable_CarAttr(), $aUpdate, array('fk_i_item_id' => $itemId));
-        }
-        
-        /**
-         * Update Make attributes
-         *
-         * @param int $makeId
-         * @param string $name 
-         */
-        public function updateMake( $makeId, $name )
-        {
-            $this->_update( $this->getTable_CarMake(), array('s_name' => $name), array('pk_i_id' => $makeId)) ;
-        }
-        
-        /**
-         * Update Model attributes
-         *
-         * @param int $modelId
-         * @param string $makeId
-         * @param string $name 
-         */
-        public function updateModel( $modelId, $makeId, $name )
-        {
-            $this->_update($this->getTable_CarModel(), array('s_name' => $name), array('pk_i_id' => $modelId, 'fk_i_make_id' => $makeId));
-        }
-        
-        /**
-         * Update Vehicle type attributes
-         *
-         * @param int $typeId
-         * @param string $locale
-         * @param string $name 
-         */
-        public function updateVehicleType($typeId, $locale, $name)
-        {
-            $aWhere = array(
-                'pk_i_id'           => $typeId, 
-                'fk_c_locale_code'  => $locale
-            );
-            $aSet = array(
-                's_name'            => $name
-            );
-            
-            $this->_update($this->getTable_CarVehicleType(), $aSet, $aWhere);
-        }
-        
-        /**
-         * Delete Car attributes given a item id
-         * 
-         * @param int $itemId 
-         */
-        public function deleteCarAttr( $itemId )
-        {
-            $this->dao->delete( $this->getTable_CarAttr(), array('fk_i_item_id' => $itemId));
-        }
-        
-        /**
-         * Delete a Make given a id
-         * 
-         * @param int $makeId 
-         */
-        public function deleteMake( $makeId )
-        {
-            $this->dao->delete( $this->getTable_CarModel(), array('fk_i_make_id' => $makeId)) ;
-            $this->dao->delete( $this->getTable_CarMake() , array('pk_i_id' => $makeId)) ;
-        }
-        
-        /**
-         * Delete a Model given a id
-         * 
-         * @param int $modelId 
-         */
-        public function deleteModel( $modelId )
-        {
-            $this->dao->delete( $this->getTable_CarModel(), array('pk_i_id' => $modelId) ) ;
-        }
-        
-        /**
-         * Delete a Vehicle type given a id
-         *
-         * @param int $typeId 
-         */
-        public function deleteVehicleType( $typeId )
-        {
-            $this->dao->delete($this->getTable_CarVehicleType(), array('pk_i_id' => $typeId));
-        }
-        
-        /**
-         * Delete vehicle type given a locale.
-         * 
-         * @param type $locale 
-         */
-        public function deleteLocale( $locale )
-        {
-            $this->dao->query( "DELETE FROM ".$this->getTable_CarVehicleType()." WHERE fk_c_locale_code = '" . $locale . "'") ;
-        }
-        
-        /**
-         * Return an array, associates field name in database with the value
-         * @param type $arrayInsert
-         * @return type 
-         */
-        private function toArrayInsert( $arrayInsert )
-        {
-            $array = array(
-                'i_year'            => $arrayInsert['year'],
-                'i_doors'           => $arrayInsert['doors'],
-                'i_seats'           => $arrayInsert['seats'],
-                'i_mileage'         => $arrayInsert['mileage'],
-                'i_engine_size'     => $arrayInsert['engine_size'],
-                'i_num_airbags'     => $arrayInsert['num_airbags'],
-                'e_transmission'    => $arrayInsert['transmission'],
-                'e_fuel'            => $arrayInsert['fuel'],
-                'e_seller'          => $arrayInsert['seller'],
-                'b_warranty'        => $arrayInsert['warranty'],
-                'b_new'             => $arrayInsert['new'],
-                'i_power'           => $arrayInsert['power'],
-                'e_power_unit'      => $arrayInsert['power_unit'],
-                'i_gears'           => $arrayInsert['gears'],
-                'fk_i_make_id'      => $arrayInsert['make'],
-                'fk_i_model_id'     => $arrayInsert['model'],
-                'fk_vehicle_type_id'=> $arrayInsert['type']
-            );
-            return $array;
+            return $aux['pm_id']; 
         }
         
         // update

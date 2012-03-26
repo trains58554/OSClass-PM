@@ -4,7 +4,7 @@
    $mType  = Params::getParam('mType');
    $messId = Params::getParam('messId');
    
-   $pm = ModelPM::newInstance()->getByPrimaryKey($messId, 0);
+   $pm = ModelPM::newInstance()->getByPrimaryKey($messId);
    
    if($userId == 0 && $userId !='') {
       $user['s_name'] = pmAdmin();
@@ -47,15 +47,15 @@
                   <tr><td>&nbsp;</td><td></td></tr>
                   <tr class="subject">
                      <td><?php _e('Subject: ','osclass_pm'); ?>&nbsp;</td>
-                     <td><input tabindex="2" type="textbox" maxlength="60" size="60" name="subject" id="subject" value="<?php if(@$item != ''){echo 'Item: ' . @$item['s_title'];}elseif($mType == 'reply' || $mType == 'quote'){echo $pm['pm_subject'];}else{ _e('[No subject]','osclass_pm');} ?>" /></td>
+                     <td><input tabindex="2" type="textbox" maxlength="60" size="60" name="subject" id="subject" value="<?php if(@$item != ''){echo 'Item: ' . @$item['s_title'];}elseif($mType == 'adminReply' || $mType == 'adminQuote'){echo $pm['pm_subject'];}else{ _e('[No subject]','osclass_pm');} ?>" /></td>
                   </tr>
                </table>
             </div>
             <div class="pm_mess">
-               <textarea tabindex="3" cols="80" rows="12" name="message" id="description"><?php if($mType == 'quote') {echo '[quote][quoteAuthor]' . __('Quote from:','osclass_pm') . ' ' . $user['s_name'] . ' ' . __('on: ','osclass_pm') . osc_format_date($pm['message_date']) . ', ' . osclass_pm_format_time($pm['message_date']) . "[/quoteAuthor]\n" . $pm['pm_message'] . "\n[/quote]";} ?></textarea>
+               <textarea tabindex="3" cols="75" rows="12" name="message" id="message"><?php if($mType == 'adminQuote') {echo '[quote][quoteAuthor]' . __('Quote from:','osclass_pm') . ' ' . $user['s_name'] . ' ' . __('on: ','osclass_pm') . osc_format_date($pm['message_date']) . ', ' . osclass_pm_format_time($pm['message_date']) . "[/quoteAuthor]\n" . $pm['pm_message'] . "\n[/quote]";} ?></textarea>
                <br />
                <p>
-               <label for="outbox"><input tabindex="4" type="checkbox" class="input_check"  tabindex="5" value="1" id="outbox" name="outbox"><?php _e(' Save a copy in my outbox','osclass_pm'); ?></label>
+               <label for="outbox"><input tabindex="4" type="checkbox" checked class="input_check"  tabindex="5" value="1" id="outbox" name="outbox"><?php _e(' Save a copy in my outbox','osclass_pm'); ?></label>
                </p>
                <p id="sendMessage">
 					    <input tabindex="5" type="submit" class="button_submit" accesskey="s"  tabindex="6" value="<?php _e('Send message','osclass_pm'); ?>">

@@ -3,9 +3,9 @@
 Plugin Name: Personal Messaging for OSClass
 Plugin URI: 
 Description: A Personal Messaging system for OSClass.
-Version: 0.5
+Version: 1.0
 Author: JChapman
-Author URI: 
+Author URI: http://forums.osclass.org/index.php?action=profile;u=1728
 Short Name: osclass_pm
 
 The plans of the diligent lead to profit as 
@@ -17,22 +17,26 @@ require_once 'ModelPM.php';
 
     function osclass_pm_install() {
        ModelPM::newInstance()->import('osclass_pm/struct.sql');
-      
+
        osc_set_preference('sendEmail', '1', 'plugin-osclass_pm', 'INTEGER');
        osc_set_preference('maxPMs', '100', 'plugin-osclass_pm', 'INTEGER');
+       osc_set_preference('deletePM', '3', 'plugin-osclass_pm', 'INTEGER');
        osc_set_preference('pmBlocking', '1', 'plugin-osclass_pm', 'INTEGER');
        osc_set_preference('pmDrafts', '0', 'plugin-osclass_pm', 'INTEGER');
        osc_set_preference('pmSent', '1', 'plugin-osclass_pm', 'INTEGER');
        osc_set_preference('pmAdmin', 'Admin', 'plugin-osclass_pm', 'STRING');
        
        ModelPM::newInstance()->insertUsersPmSettings();
+       ModelPM::newInstance()->insertEmailTemplates();
     }
     
     function osclass_pm_uninstall() {
        ModelPM::newInstance()->uninstall();
+       ModelPM::newInstance()->removeEmailTemplates();
        
        osc_delete_preference('sendEmail', 'plugin-osclass_pm');
        osc_delete_preference('maxPMs', 'plugin-osclass_pm');
+       osc_delete_preference('deletePM','plugin-osclass_pm');
        osc_delete_preference('pmBlocking', 'plugin-osclass_pm');
        osc_delete_preference('pmDrafts', 'plugin-osclass_pm');
        osc_delete_preference('pmSent', 'plugin-osclass_pm');
@@ -49,6 +53,10 @@ require_once 'ModelPM.php';
     
     function maxPMs() {
        return(osc_get_preference('maxPMs','plugin-osclass_pm'));
+    }
+    
+    function deletePM() {
+       return(osc_get_preference('deletePM','plugin-osclass_pm'));
     }
     
     function pmBlocking() {
@@ -68,9 +76,9 @@ require_once 'ModelPM.php';
     }
     
     //user pm settings helpers    
-    function pmEmailAlert() {
-       $userSettings = ModelPM::newInstance()->getUserPmSettings(osc_logged_user_id());
-       return $userSettings['send_email'];
+    function pmEmailAlert($user_id) {
+       $userSettings = ModelPM::newInstance()->getUserPmSettings($user_id);
+       return @$userSettings['send_email'];
     }
     
     function pmFlashAlert() {
@@ -194,6 +202,10 @@ require_once 'ModelPM.php';
 // Before HTML 
 
    function osclass_pm_before_html() {
+      $inboxFull = Params::getParam('f');
+      if(osc_is_web_user_logged_in() && $inboxFull == 1) {
+         osc_add_flash_error_message(__('Sorry the selected user\'s inbox is full! Please try again later.','osclass_pm'));
+      }
       if(osc_is_web_user_logged_in() && pmFlashAlert() == 1 && !osclass_pm_is_inbox() && !osclass_pm_is_messages() ) {
          $newPMs = ModelPM::newInstance()->getRecipientMessages(osc_logged_user_id(), 1, 1, 'pm_id', 'DESC');
          $countPMs = count($newPMs);
@@ -376,6 +388,7 @@ require_once 'ModelPM.php';
             $("#checkAll").attr("checked", $(".delChecks:checked").length == $(".delChecks").length);
 
          });
+         
 			
 			} );
 		</script>
@@ -411,6 +424,25 @@ require_once 'ModelPM.php';
 
     include('email-temps.php');
     
+    switch(deletePM()) {
+       case 1:
+         $cron = 'hourly';
+       break;
+       case 2:
+         $cron = 'daily';
+       break;
+       case 3: 
+         $cron = 'weekly';
+       break;
+       default:
+         $cron = 'weekly';
+       break;
+    }
+    
+    function osclass_pm_cron() {
+       ModelPM::newInstance()->deleteMessages();
+    }
+    
     // This is needed in order to be able to activate the plugin
     osc_register_plugin(osc_plugin_path(__FILE__), 'osclass_pm_install') ;
     osc_add_hook(__FILE__ . "_configure", 'osclass_pm_config');
@@ -422,6 +454,7 @@ require_once 'ModelPM.php';
     osc_add_hook('user_menu', 'osclass_pm_user_menu', 1);
     osc_add_hook('admin_menu','osclass_pm_admin_menu', 1);
     osc_add_hook('before_html','osclass_pm_before_html');
+    osc_add_hook('cron_' . $cron,'osclass_pm_cron');
     
     
 ?>

@@ -34,6 +34,7 @@ $userSettings = ModelPM::newInstance()->getUserPmSettings(osc_logged_user_id());
                </select>
             </td>
          </tr>
+         <?php if( pmSent() ) { ?>
          <tr>
             <td><?php _e('Save a copy of each personal message in your outbox by default','osclass_pm'); ?>?</td>
             <td>
@@ -43,6 +44,7 @@ $userSettings = ModelPM::newInstance()->getUserPmSettings(osc_logged_user_id());
                </select>
             </td>
          </tr>
+         <?php } ?>
          <tr>
             <td></td>
             <td class="pmSettingsSave"><input tabindex="5" type="submit" class="button_submit" accesskey="s"  tabindex="6" value="<?php _e('Save Settings','osclass_pm'); ?>"></td>

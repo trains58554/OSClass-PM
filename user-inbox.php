@@ -10,7 +10,7 @@
         <?php echo osc_private_user_menu(); ?>
     </div>
     <div id="main">
-            <h2><?php _e('Inbox', 'osclass_pm'); ?></h2> <a href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=0&mType=new';?>"><?php echo __('Send PM to','osclass_pm') . ' ' . pmAdmin(); ?></a><br /><br />
+            <h2><?php _e('Inbox', 'osclass_pm'); ?></h2> <a href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=0&mType=new';?>"><?php echo __('Send PM to the','osclass_pm') . ' ' . pmAdmin(); ?></a><br /><br />
             <form action="<?php echo osc_base_url() . 'oc-content/plugins/osclass_pm/user-proc.php'; ?>" method="POST">
             <input type="hidden" name="page" value="custom" />
             <input type="hidden" name="file" value="osclass_pm/user-proc.php" />
@@ -76,5 +76,5 @@
 </div>
 <?php } else { 
 // HACK TO DO A REDIRECT ?>
-    	<script>location.href="<?php echo osc_user_login_url(); ?>"</script>
+    	<script>location.href="<?php echo osc_user_login_url() . '&http_referer=' . $_SERVER['HTTP_REFERER']; ?>"</script>
 <?php } ?>
