@@ -3,7 +3,7 @@
 Plugin Name: Personal Messaging for OSClass
 Plugin URI: 
 Description: A Personal Messaging system for OSClass.
-Version: 1.0
+Version: 1.5
 Author: JChapman
 Author URI: http://forums.osclass.org/index.php?action=profile;u=1728
 Short Name: osclass_pm
@@ -16,7 +16,7 @@ require_once 'ModelPM.php';
 // Install and uninstall functions.
 
     function osclass_pm_install() {
-       ModelPM::newInstance()->import('osclass_pm/struct.sql');
+       //ModelPM::newInstance()->import('osclass_pm/struct.sql');
 
        osc_set_preference('sendEmail', '1', 'plugin-osclass_pm', 'INTEGER');
        osc_set_preference('maxPMs', '100', 'plugin-osclass_pm', 'INTEGER');
@@ -197,6 +197,35 @@ require_once 'ModelPM.php';
       }
       return FALSE;
     }
+    
+    /**
+     * Get if admin is on inbox page
+     *
+     * @return boolean
+     */
+    function osclass_is_inbox_page() {
+      $location = Params::getParam('page');
+      $file = Params::getParam('file');      
+      if($location == 'plugins' && $file == 'osclass_pm/admin-inbox.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
+    /**
+     * Get if admin is on outbox page
+     *
+     * @return boolean
+     */
+    function osclass_is_outbox_page() {
+      $location = Params::getParam('page');
+      $file = Params::getParam('file');      
+      if($location == 'plugins' && $file == 'osclass_pm/admin-outbox.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
 // End HELPERS
 
 // Before HTML 
@@ -313,14 +342,33 @@ require_once 'ModelPM.php';
             });
           </script>
           <?php
+       } else {
+          $userId = Params::getParam('id');
+          $user = User::newInstance()->findByPrimaryKey($userId);
+          ?>
+          <script type="text/javascript" >
+            $(document).ready(function(){
+               $('#user_data').append("<li><a href=\"<?php echo osc_user_login_url() . '&http_referer=' . osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . $userId . '&mType=new'; ?>\"><?php echo __('Login to contact seller.','osclass_pm'); ?></a></li>");
+            });
+          </script>
+          <?php
        }
        
-       if(osc_is_ad_page()){
+       if(osc_is_ad_page() && osc_is_web_user_logged_in() && osc_item_user_id() != ''){
           $user = User::newInstance()->findByPrimaryKey(osc_item_user_id());
           ?>
           <script type="text/javascript" >
             $(document).ready(function(){
-               $('.name').append("<br /><a href=\"<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Send PM to ','osclass_pm') . $user['s_name']; ?></a>");
+               $('p.contact_button').append("<strong class=\"share\"><a href=\"<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Send PM to ','osclass_pm') . $user['s_name']; ?></a></strong>");
+            });
+          </script>
+          <?php
+       } elseif(osc_is_ad_page() && !osc_is_web_user_logged_in()) {
+          $user = User::newInstance()->findByPrimaryKey(osc_item_user_id());
+          ?>
+          <script type="text/javascript" >
+            $(document).ready(function(){
+               $('p.contact_button').append("<strong class=\"share\"><a href=\"<?php echo osc_user_login_url() . '&http_referer=' . osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Login to contact seller.','osclass_pm'); ?></a></strong>");
             });
           </script>
           <?php
@@ -359,10 +407,21 @@ require_once 'ModelPM.php';
        <link rel="stylesheet" type="text/css" href="<?php echo osc_base_url() .'oc-content/plugins/osclass_pm/css/pmTables.css'; ?>" />
        <script type="text/javascript" >
          $(document).ready(function(){
-            $('#datatables_quick_edit').prepend("<a href=\"<?php echo osc_admin_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Send PM','osclass_pm'); ?></a> | ");
+            /*$('#datatables_list').find('#datatables_quick_edit').addClass('dt');
+            
+            //$('#datatables_list tbody tr').each(function() {
+			      //var thisTr = $('#datatables_list tbody tr').parent();
+               //var thirdTDText = $('td:nth-child(3)').text();
+               //$(thisTr).append(thirdTDText);
+               //alert(thirdTDText);
+               $('td:nth-child(3)').each(function () {
+                  //$('#datatables_list tbody tr').append($(this).text() + ' ');
+                  $('.dt').prepend("<a href=\"<?php echo osc_admin_base_url(true) . '?page=custom&file=osclass_pm/admin-send.php&userId=' . osc_item_user_id() . '&mType=new'; ?>\"><?php echo __('Send PM','osclass_pm'); ?></a> | " + $(this).text());
+               });
+		      //}); */
          });
-       </script>
-       <script type='text/javascript' src="<?php echo osc_base_url() . 'oc-content/plugins/osclass_pm/js/jquery.dataTables.min.js'; ?>"></script>
+       </script> 
+        <script type='text/javascript' src="<?php echo osc_base_url() . 'oc-content/plugins/osclass_pm/js/jquery.dataTables.min.js'; ?>"></script>
        <script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {			   
 				$('#datatables_pm').dataTable( {
@@ -405,19 +464,41 @@ require_once 'ModelPM.php';
        $countPMs = count($newPMs);
        $countPMdrafts = count($newPMdrafts);
        
-       echo '<h3><a href="#">' . pmAdmin() . __('\'s PM Box','osclass_pm') .  ' (' . $countPMs . ' ' . __('New','osclass_pm') .')</a></h3><ul>';
+       if( OSCLASS_VERSION < '2.4.0') {
+           echo '<h3><a href="#">' . pmAdmin() . __('\'s PM Box','osclass_pm') .  ' (' . $countPMs . ' ' . __('New','osclass_pm') .')</a></h3><ul>';
    	    	 	 
-        echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin-inbox.php') . '" > &raquo; '. __('Inbox', 'osclass_pm') . ' (' . $countPMs . ')</a></li>';
-        if(pmDrafts()){
-        echo '<li class="" ><a href="' . osc_admin_render_plugin_url(osc_plugin_folder(__FILE__) . 'admin-drafts.php') . '" >' . __('Drafts', 'osclass_pm') . ' (' . $countPMdrafts . ')</a></li>';
+           echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin-inbox.php') . '" > &raquo; '. __('Inbox', 'osclass_pm') . ' (' . $countPMs . ')</a></li>';
+           if(pmDrafts()){
+           echo '<li class="" ><a href="' . osc_admin_render_plugin_url(osc_plugin_folder(__FILE__) . 'admin-drafts.php') . '" >' . __('Drafts', 'osclass_pm') . ' (' . $countPMdrafts . ')</a></li>';
+           }
+           echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin-outbox.php') . '" >&raquo; ' . __('Outbox', 'osclass_pm') . '</a></li>';
+           echo '</ul>';
+           echo '<h3><a href="#">' . __('OSClass PM Settings', 'osclass_pm') . '</a></h3><ul>';
+   	    	 	 
+           echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin.php') . '" > &raquo; '. __('Configure', 'osclass_pm') . '</a></li>' .
+           '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/help.php') . '" >&raquo; ' . __('F.A.Q. / Help', 'osclass_pm') . '</a></li>';
+           echo '</ul>';
+           
+        } else {
+           
+           echo '<li id="admin_pm">';
+           echo '<h3><a href="#" class="pm_admin">' . pmAdmin() . __('\'s PM Box','osclass_pm') .  ' (' . $countPMs . ' ' . __('New','osclass_pm') .')</a></h3><ul>';
+   	    	 	 
+           echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin-inbox.php') . '" > &raquo; '. __('Inbox', 'osclass_pm') . ' (' . $countPMs . ')</a></li>';
+           if(pmDrafts()){
+           echo '<li class="" ><a href="' . osc_admin_render_plugin_url(osc_plugin_folder(__FILE__) . 'admin-drafts.php') . '" >' . __('Drafts', 'osclass_pm') . ' (' . $countPMdrafts . ')</a></li>';
+           }
+           echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin-outbox.php') . '" >&raquo; ' . __('Outbox', 'osclass_pm') . '</a></li>';
+           echo '</ul>';
+           echo '</li>';
+           echo '<li id="pm_settings">';
+           echo '<h3><a href="#" class="settings_pm">' . __('OSClass PM Settings', 'osclass_pm') . '</a></h3><ul>';
+   	    	 	 
+           echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin.php') . '" > &raquo; '. __('Configure', 'osclass_pm') . '</a></li>' .
+           '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/help.php') . '" >&raquo; ' . __('F.A.Q. / Help', 'osclass_pm') . '</a></li>';
+           echo '</ul>';
+           echo '</li>';
         }
-        echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin-outbox.php') . '" >&raquo; ' . __('Outbox', 'osclass_pm') . '</a></li>';
-        echo '</ul>';
-       echo '<h3><a href="#">' . __('OSClass PM Settings', 'osclass_pm') . '</a></h3><ul>';
-   	    	 	 
-        echo '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/admin.php') . '" > &raquo; '. __('Configure', 'osclass_pm') . '</a></li>' .
-        '<li class="" ><a href="' . osc_admin_render_plugin_url('osclass_pm/help.php') . '" >&raquo; ' . __('F.A.Q. / Help', 'osclass_pm') . '</a></li>';
-        echo '</ul>';
     }
     
 // End admin side related. 
@@ -443,6 +524,42 @@ require_once 'ModelPM.php';
        ModelPM::newInstance()->deleteMessages();
     }
     
+    function osclass_pm_supertoolbar() {
+       if( !osc_is_web_user_logged_in() ) {
+            return false;
+        }
+        
+        /*if( Rewrite::newInstance()->get_location() != 'item' ) {
+            return false;
+        }*/
+        
+        //if( osc_item_user_id() != osc_logged_user_id() ) {
+          //  return false;
+        //}
+        
+        $toolbar = SuperToolBar::newInstance();
+               
+        $newPMs = ModelPM::newInstance()->getRecipientMessages(osc_logged_user_id(), 1, 1, 'pm_id', 'DESC');
+        $countPMs = count($newPMs);
+        
+        
+        $pm_url = osc_render_file_url(osc_plugin_folder(__FILE__) . 'user-inbox.php');
+
+        $totalNew = '';
+                
+        if($countPMs > 0){
+           $totalNew = '(' . $countPMs . ')';
+        }
+        $toolbar->addOption('<a href="' . $pm_url . '" />' . __('Inbox', 'osclass_pm') . ' ' . $totalNew . '</a>');
+        
+                    
+        
+        
+        $outbox_url = osc_render_file_url(osc_plugin_folder(__FILE__) . 'user-outbox.php');
+        $toolbar->addOption('<a href="' . $outbox_url . '" />' . __('Outbox', 'osclass_pm') . '</a>');
+        
+    }
+    
     // This is needed in order to be able to activate the plugin
     osc_register_plugin(osc_plugin_path(__FILE__), 'osclass_pm_install') ;
     osc_add_hook(__FILE__ . "_configure", 'osclass_pm_config');
@@ -450,11 +567,16 @@ require_once 'ModelPM.php';
     osc_add_hook(osc_plugin_path(__FILE__) . '_uninstall', 'osclass_pm_uninstall') ;
     
     osc_add_hook('header', 'osclass_pm_header');
-    osc_add_hook('admin_footer','osclass_pm_admin_footer');
+    if(osclass_is_inbox_page() || osclass_is_outbox_page()) {
+      osc_add_hook('admin_footer','osclass_pm_admin_footer');
+    }
     osc_add_hook('user_menu', 'osclass_pm_user_menu', 1);
-    osc_add_hook('admin_menu','osclass_pm_admin_menu', 1);
+    osc_add_hook('admin_menu','osclass_pm_admin_menu');
     osc_add_hook('before_html','osclass_pm_before_html');
     osc_add_hook('cron_' . $cron,'osclass_pm_cron');
+    
+    // Add hook to supertoolbar
+    osc_add_hook('supertoolbar_hook' , 'osclass_pm_supertoolbar');
     
     
 ?>

@@ -75,6 +75,7 @@
     </div>
 </div>
 <?php } else { 
+Session::newInstance()->_setReferer(osc_user_login_url() . '&http_referer=' . osc_base_url(true) . '?page=custom&file=osclass_pm/user-inbox.php');
 // HACK TO DO A REDIRECT ?>
-    	<script>location.href="<?php echo osc_user_login_url() . '&http_referer=' . $_SERVER['HTTP_REFERER']; ?>"</script>
+    	<script>location.href="<?php echo osc_user_login_url(); ?>"</script>
 <?php } ?>

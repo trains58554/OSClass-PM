@@ -3,6 +3,7 @@
    $recipCount = count($recipPMs);
 ?>
       <h2><?php _e('Inbox', 'osclass_pm'); ?></h2>
+      <fieldset>
             <form action="<?php echo osc_admin_base_url(true); ?>" method="POST">
             <input type="hidden" name="page" value="plugins" />
             <input type="hidden" name="action" value="renderplugin" />

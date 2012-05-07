@@ -68,7 +68,7 @@ if($messCount < maxPMs()){
                </table>
             </div>
             <div class="pm_mess">
-               <textarea tabindex="3" cols="80" rows="12" name="message" id="description"><?php if($mType == 'quote') {echo '[quote][quoteAuthor]' . __('Quote from:','osclass_pm') . ' ' . $user['s_name'] . ' ' . __('on: ','osclass_pm') . osc_format_date($pm['message_date']) . ', ' . osclass_pm_format_time($pm['message_date']) . "[/quoteAuthor]\n" . $pm['pm_message'] . "\n[/quote]";} ?></textarea>
+               <textarea tabindex="3" rows="12" name="message" id="message"><?php if($mType == 'quote') {echo '[quote][quoteAuthor]' . __('Quote from:','osclass_pm') . ' ' . $user['s_name'] . ' ' . __('on: ','osclass_pm') . osc_format_date($pm['message_date']) . ', ' . osclass_pm_format_time($pm['message_date']) . "[/quoteAuthor]\n" . $pm['pm_message'] . "\n[/quote]";} ?></textarea>
                <br />
                <?php if(pmSent()) { ?>
                <p>
@@ -102,6 +102,7 @@ if($messCount < maxPMs()){
       <script>location.href="<?php echo $_SERVER['HTTP_REFERER'] . '&f=1'; ?>"</script>
 <?php } ?>
 <?php } else { 
+Session::newInstance()->_setReferer(osc_user_login_url() . '&http_referer=' . osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php?userId=' . $userId . '&mType=' . $mType . '&messId=' . $messId);
 // HACK TO DO A REDIRECT ?>
     	<script>location.href="<?php echo osc_user_login_url(); ?>"</script>
 <?php } ?>
