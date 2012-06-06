@@ -45,7 +45,7 @@
                       <?php $user = User::newInstance()->findByPrimaryKey($recipPM['recip_id']); ?>
                         <td class="pmCheckboxes"><input class="delChecks" type="checkbox" id="delete<?php echo $recipPM['pm_id']; ?>" name="pms[]" value="<?php echo $recipPM['pm_id']; ?>" /></td>
                         <td><?php echo osc_format_date($recipPM['message_date']) . ', ' . osclass_pm_format_time($recipPM['message_date']); ?></td>
-                        <td><a class="mesLink" href="<?php echo osc_admin_render_plugin_url(osc_plugin_folder(__FILE__) . 'admin-messages.php?message=' . $recipPM['pm_id'] . '&box=outbox'); ?>"><?php echo $recipPM['pm_subject']; ?></a></td>
+                        <td><a class="mesLink" href="<?php echo osc_admin_render_plugin_url(osc_plugin_folder(__FILE__) . 'admin-messages.php&message=' . $recipPM['pm_id'] . '&box=outbox'); ?>"><?php echo $recipPM['pm_subject']; ?></a></td>
                         <td><?php echo $user['s_name']; ?></td>
                       </tr>
                   <?php } ?>

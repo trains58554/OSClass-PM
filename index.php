@@ -3,7 +3,7 @@
 Plugin Name: Personal Messaging for OSClass
 Plugin URI: 
 Description: A Personal Messaging system for OSClass.
-Version: 1.5
+Version: 1.5.1
 Author: JChapman
 Author URI: http://forums.osclass.org/index.php?action=profile;u=1728
 Short Name: osclass_pm
@@ -16,7 +16,7 @@ require_once 'ModelPM.php';
 // Install and uninstall functions.
 
     function osclass_pm_install() {
-       //ModelPM::newInstance()->import('osclass_pm/struct.sql');
+       ModelPM::newInstance()->import('osclass_pm/struct.sql');
 
        osc_set_preference('sendEmail', '1', 'plugin-osclass_pm', 'INTEGER');
        osc_set_preference('maxPMs', '100', 'plugin-osclass_pm', 'INTEGER');
@@ -226,6 +226,34 @@ require_once 'ModelPM.php';
       return FALSE;
     }
     
+    /**
+     * Get if admin is on messages page
+     *
+     * @return boolean
+     */
+    function osclass_is_messages_page() {
+      $location = Params::getParam('page');
+      $file = Params::getParam('file');      
+      if($location == 'plugins' && $file == 'osclass_pm/admin-messages.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
+    /**
+     * Get if admin is on reply page
+     *
+     * @return boolean
+     */
+    function osclass_is_reply_page() {
+      $location = Params::getParam('page');
+      $file = Params::getParam('file');      
+      if($location == 'plugins' && $file == 'osclass_pm/admin-send.php'){
+         return TRUE;
+      }
+      return FALSE;
+    }
+    
 // End HELPERS
 
 // Before HTML 
@@ -359,7 +387,7 @@ require_once 'ModelPM.php';
           ?>
           <script type="text/javascript" >
             $(document).ready(function(){
-               $('p.contact_button').append("<strong class=\"share\"><a href=\"<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Send PM to ','osclass_pm') . $user['s_name']; ?></a></strong>");
+               $('p.contact_button').append("<strong class=\"share\"><a href=\"<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Send PM to ','osclass_pm') . $user['s_name']; ?></a></strong>");        
             });
           </script>
           <?php
@@ -368,7 +396,7 @@ require_once 'ModelPM.php';
           ?>
           <script type="text/javascript" >
             $(document).ready(function(){
-               $('p.contact_button').append("<strong class=\"share\"><a href=\"<?php echo osc_user_login_url() . '&http_referer=' . osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Login to contact seller.','osclass_pm'); ?></a></strong>");
+               $('div#description p.contact_button').append("<strong class=\"share\"><a href=\"<?php echo osc_user_login_url() . '&http_referer=' . osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php&userId=' . osc_item_user_id() . '&itemId=' . osc_item_id() . '&mType=new'; ?>\"><?php echo __('Login to contact seller.','osclass_pm'); ?></a></strong>");
             });
           </script>
           <?php
@@ -550,14 +578,7 @@ require_once 'ModelPM.php';
         if($countPMs > 0){
            $totalNew = '(' . $countPMs . ')';
         }
-        $toolbar->addOption('<a href="' . $pm_url . '" />' . __('Inbox', 'osclass_pm') . ' ' . $totalNew . '</a>');
-        
-                    
-        
-        
-        $outbox_url = osc_render_file_url(osc_plugin_folder(__FILE__) . 'user-outbox.php');
-        $toolbar->addOption('<a href="' . $outbox_url . '" />' . __('Outbox', 'osclass_pm') . '</a>');
-        
+        $toolbar->addOption('<a href="' . $pm_url . '" />' . __('Inbox', 'osclass_pm') . ' ' . $totalNew . '</a>');                                                       
     }
     
     // This is needed in order to be able to activate the plugin
@@ -567,11 +588,11 @@ require_once 'ModelPM.php';
     osc_add_hook(osc_plugin_path(__FILE__) . '_uninstall', 'osclass_pm_uninstall') ;
     
     osc_add_hook('header', 'osclass_pm_header');
-    if(osclass_is_inbox_page() || osclass_is_outbox_page()) {
+    if(osclass_is_inbox_page() || osclass_is_outbox_page() || osclass_is_messages_page() || osclass_is_reply_page() ) {
       osc_add_hook('admin_footer','osclass_pm_admin_footer');
     }
     osc_add_hook('user_menu', 'osclass_pm_user_menu', 1);
-    osc_add_hook('admin_menu','osclass_pm_admin_menu');
+    osc_add_hook('admin_menu','osclass_pm_admin_menu', 1);
     osc_add_hook('before_html','osclass_pm_before_html');
     osc_add_hook('cron_' . $cron,'osclass_pm_cron');
     

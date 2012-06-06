@@ -14,6 +14,7 @@
    $words[] = array('[quote]','[/quote]', '[quoteAuthor]','[/quoteAuthor]');
    $words[] = array('<div class="messQuote">','</div>', '<div class="quoteAuthor">','</div>');
    $message  = osc_mailBeauty($pm['pm_message'], $words) ;
+   echo Params::getParam('file');
 ?>
     <h2>
     <strong><?php echo __('Message: ', 'osclass_pm') . osc_highlight($pm['pm_subject'], 50); ?></strong>

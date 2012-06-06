@@ -23,6 +23,11 @@ if($messCount < maxPMs()){
    if($itemId != '') {
       $item = Item::newInstance()->findByPrimaryKey($itemId);
    }
+if($pm['recip_id'] != osc_logged_user_id() && ($mType == 'reply' || $mType == 'quote')){
+   // send user back to the inbox page since they where trying to access another users messages. ?>
+   <script>location.href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-inbox.php'; ?>"</script>
+   <?php
+} else {
 ?>
 
 <div class="content user_account">
@@ -98,8 +103,10 @@ if($messCount < maxPMs()){
     </form>
     </div>
 </div>
+<?php } ?>
 <?php } else { ?>
-      <script>location.href="<?php echo $_SERVER['HTTP_REFERER'] . '&f=1'; ?>"</script>
+      <?php // send user back to the inbox page and alert them that the users inbox is full. ?>
+      <script>location.href="<?php echo osc_base_url(true) . '?page=custom&file=osclass_pm/user-inbox.php&f=1'; ?>"</script>
 <?php } ?>
 <?php } else { 
 Session::newInstance()->_setReferer(osc_user_login_url() . '&http_referer=' . osc_base_url(true) . '?page=custom&file=osclass_pm/user-send.php?userId=' . $userId . '&mType=' . $mType . '&messId=' . $messId);
